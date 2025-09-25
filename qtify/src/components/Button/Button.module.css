@@ -1,0 +1,21 @@
+.button {
+  background: var(--qtify-black);
+  color: var(--qtify-green);
+  border: 1px solid var(--qtify-green);
+  padding: 10px 16px;
+  border-radius: var(--btn-radius);
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.button:hover {
+  transform: translateY(-1px);
+}
+
+/* small utility if used elsewhere */
+.small {
+  padding: 6px 10px;
+  font-size: 0.9rem;
+}
