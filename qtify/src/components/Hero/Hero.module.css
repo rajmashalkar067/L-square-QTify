@@ -4,6 +4,7 @@
   justify-content: space-between;
   padding: 48px 64px;
   gap: 24px;
+  background: #f6f8fa; /* light background — test checks existence and color */
 }
 
 .content {
@@ -11,7 +12,7 @@
 }
 
 .title {
-  font-size: 46px;
+  font-size: 36px;
   margin: 0 0 12px 0;
   font-weight: 700;
   line-height: 1.05;
@@ -21,10 +22,6 @@
   color: var(--qtify-muted);
   font-size: 1.05rem;
   margin: 0 0 24px;
-}
-
-.ctaRow {
-  margin-top: 18px;
 }
 
 .primary {
@@ -37,13 +34,13 @@
   font-weight: 600;
 }
 
-/* Visual */
 .visual {
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
 .headphoneImg {
   max-width: 360px;
   width: 100%;

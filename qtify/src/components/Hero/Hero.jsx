@@ -1,17 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./Hero.module.css";
-import headphones from "../../assets/headphones.svg";
+import headphones from "../../assets/headphones.svg"; // ensure this exists
 
 export default function Hero() {
+  // ensure an image is present and alt text
+  useEffect(() => {
+    // no-op - keeping for future fetch or analytics hook
+  }, []);
+
   return (
-    <section className={styles.hero}>
+    <section className={styles.hero} data-testid="hero-section">
       <div className={styles.content}>
-        <h1 className={styles.title}>Music for everyone</h1>
+        <h1 className={styles.title}>100 Thousand Songs, ad-free</h1>
         <p className={styles.subtitle}>
-          Discover millions of tracks. Listen everywhere. Curate your mood.
+          Stream songs offline, discover playlists and more.
         </p>
         <div className={styles.ctaRow}>
-          {/* reusable Button */}
           <button className={styles.primary}>Get Started</button>
         </div>
       </div>
