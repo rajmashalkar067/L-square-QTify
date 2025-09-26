@@ -7,8 +7,8 @@ import styles from "./Section.module.css";
 
 export default function Section({
   title = "Top Albums",
-  endpoint = "/getTopAlbums",
-  isNew = false, // when true, render a slider + show all control
+  endpoint = "/getTopAlbums", // relative endpoint (Cypress intercepts this)
+  isNew = false,
 }) {
   const [items, setItems] = useState([]);
   const [collapsed, setCollapsed] = useState(false);
@@ -16,19 +16,69 @@ export default function Section({
   const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
+    let mounted = true;
     setLoading(true);
+
+    // debugging log
+    // (useful to inspect on deployed site console and deployment logs)
+    console.log("[Section] fetching endpoint:", endpoint);
+
     axios
       .get(endpoint)
       .then((res) => {
         const data = res?.data?.albums ?? res?.data ?? res;
-        setItems(Array.isArray(data) ? data : []);
+        if (mounted) {
+          if (Array.isArray(data) && data.length > 0) {
+            console.log(`[Section] ${title}: got ${data.length} items from ${endpoint}`);
+            setItems(data);
+          } else {
+            // empty relative response — try fallback to real backend (only for deployed UI)
+            console.warn(`[Section] ${title}: no items from ${endpoint}, attempting backend fallback`);
+            return axios.get("https://qtify-backend.labs.crio.do/albums/top")
+              .then((r2) => {
+                const d2 = r2?.data?.albums ?? r2?.data ?? r2;
+                if (Array.isArray(d2)) {
+                  console.log(`[Section] ${title}: fallback got ${d2.length} items`);
+                  setItems(d2);
+                } else {
+                  setItems([]);
+                }
+              })
+              .catch((e2) => {
+                console.error("[Section] fallback error", e2);
+                setItems([]);
+              });
+          }
+        }
       })
       .catch((err) => {
-        console.warn("Section fetch error", err);
-        setItems([]);
+        // relative fetch failed (404/CORS) — attempt fallback
+        console.warn(`[Section] fetch error for ${endpoint}`, err);
+        if (!mounted) return;
+        axios
+          .get("https://qtify-backend.labs.crio.do/albums/top")
+          .then((r2) => {
+            const d2 = r2?.data?.albums ?? r2?.data ?? r2;
+            if (Array.isArray(d2)) {
+              console.log(`[Section] ${title}: fallback got ${d2.length} items`);
+              setItems(d2);
+            } else {
+              setItems([]);
+            }
+          })
+          .catch((e2) => {
+            console.error("[Section] fallback error", e2);
+            setItems([]);
+          });
       })
-      .finally(() => setLoading(false));
-  }, [endpoint]);
+      .finally(() => {
+        if (mounted) setLoading(false);
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, [endpoint, title]);
 
   const headerButton = () => {
     if (isNew) {
