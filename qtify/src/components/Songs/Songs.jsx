@@ -1,36 +1,29 @@
-// src/components/Songs/Songs.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-export default function Songs() {
+const BACKEND_BASE = "https://qtify-backend.labs.crio.do";
+const endpointMap = {
+  "/getTopAlbums": `${BACKEND_BASE}/albums/top`,
+  "/getNewAlbums": `${BACKEND_BASE}/albums/new`,
+  "/getSongs": `${BACKEND_BASE}/songs`,
+};
+
+export default function Songs({ endpoint = "/getSongs" }) {
   const [songs, setSongs] = useState([]);
 
   useEffect(() => {
-    console.log("[Songs] requesting /getSongs");
-    let mounted = true;
-    axios.get("/getSongs")
-      .then(res => {
-        if (!mounted) return;
-        const data = res?.data?.songs ?? res?.data ?? res;
-        if (Array.isArray(data)) {
-          setSongs(data);
-          console.log("[Songs] got", data.length);
-        } else {
-          setSongs([]);
-          console.warn("[Songs] empty response from /getSongs");
-        }
-      })
-      .catch(err => {
-        console.error("[Songs] error requesting /getSongs", err && err.message);
-        setSongs([]);
-      });
-    return () => { mounted = false; };
-  }, []);
+    const apiUrl = endpointMap[endpoint] || endpoint;
+    console.log("[Songs] fetching", apiUrl);
+    axios.get(apiUrl).then(r => setSongs(r?.data?.songs ?? r?.data ?? [])).catch(e => {
+      console.error("[Songs] err", e.message || e);
+      setSongs([]);
+    });
+  }, [endpoint]);
 
   return (
-    <div>
-      {/* render song cards / placeholder */}
-      {songs.length === 0 ? <p>No songs found</p> : songs.map(s => <div key={s.id}>{s.title}</div>)}
-    </div>
+    <section>
+      <h3>Top Songs</h3>
+      {songs.length === 0 ? <p>No songs found</p> : <ul>{songs.map(s => <li key={s.id}>{s.title}</li>)}</ul>}
+    </section>
   );
 }
