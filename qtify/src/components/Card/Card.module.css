@@ -1,0 +1,73 @@
+.card {
+  width: 180px;
+  min-width: 180px;
+  border-radius: 12px;
+  overflow: visible; /* allow bottom overlay to visually sit inside card border */
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Image area ~70% */
+.imageWrap {
+  position: relative;
+  width: 100%;
+  height: 220px; /* adjust to achieve image:info ratio */
+  border-radius: 12px;
+  overflow: hidden;
+  background: #111; /* serves as frame border while image loads */
+  box-shadow: 0 3px 8px rgba(0,0,0,0.45);
+}
+
+/* main image */
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* White rounded overlay that sits at bottom of image */
+.bottomOverlay {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: -18px;              /* overlap outside image into info area like mock */
+  height: 46px;
+  background: #fff;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  padding: 6px 10px;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+}
+
+/* chip looks like in mock (small pill) */
+.chip {
+  font-size: 0.8rem !important;
+  padding: 6px 12px !important;
+  border-radius: 999px !important;
+  background: #0f0f0f !important; /* dark chip or keep white if desired */
+  color: #fff !important;
+  height: 28px;
+}
+
+/* Bottom info area (~30%) */
+.info {
+  margin-top: 22px; /* give space for overlay overlap */
+  padding: 6px 4px 0 4px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 54px;
+}
+
+.title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #e7e7e7; /* for dark background sections we use light text */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding-left: 6px;
+}

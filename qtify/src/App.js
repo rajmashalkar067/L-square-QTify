@@ -1,9 +1,9 @@
+// src/App.js (excerpt)
 import React from "react";
 import Navbar from "./components/Navbar/Navbar";
 import Hero from "./components/Hero/Hero";
-import Albums from "./components/Albums/Albums";
+import Section from "./components/Section/Section";
 import "./index.css";
-
 
 function App() {
   return (
@@ -11,7 +11,7 @@ function App() {
       <Navbar />
       <main>
         <Hero />
-        <Albums />
+        <Section title="Top Albums" />
       </main>
     </div>
   );
